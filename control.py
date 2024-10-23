@@ -1,5 +1,5 @@
 import requests
-from tplink_smartplug import SmartPlug
+from kasa import SmartPlug
 
 # Function to control TP-Link smart plugs using Matter protocol
 def control_smart_plug(ip_address, state):
