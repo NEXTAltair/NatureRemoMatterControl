@@ -1,3 +1,4 @@
 requests
 tplink-smarthome-api
 pytest
+python-matter-server
