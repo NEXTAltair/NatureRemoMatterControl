@@ -1,0 +1,3 @@
+requests
+tplink-smarthome-api
+pytest
