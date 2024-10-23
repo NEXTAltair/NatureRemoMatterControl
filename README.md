@@ -23,9 +23,16 @@ The project involves the following components:
    pip install -r requirements.txt
    ```
 
-3. Set up your Nature Remo API access token:
+3. Set up your Nature Remo API access token and TP-Link Smart Plug IP address:
    - Obtain your access token from the Nature Remo developer portal.
-   - Set the access token in the `monitoring.py` file.
+   - Create a `config.ini` file in the root directory of the project with the following content:
+     ```
+     [NatureRemo]
+     token = YOUR_ACCESS_TOKEN
+
+     [TPLink]
+     ip_address = YOUR_SMART_PLUG_IP_ADDRESS
+     ```
 
 4. Set up your TP-Link Smart Plug:
    - Ensure your TP-Link Smart Plug is connected to your LAN.
