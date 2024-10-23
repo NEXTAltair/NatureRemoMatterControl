@@ -38,6 +38,10 @@ The project involves the following components:
    - Ensure your TP-Link Smart Plug is connected to your LAN.
    - Follow the instructions in the `control.py` file to configure the smart plug.
 
+5. Set up the Matter development environment in VSCode:
+   - Install the Matter extension for VSCode from the marketplace.
+   - Follow the instructions provided in the extension documentation to configure the Matter development environment.
+
 ## Usage Instructions
 
 ### Controlling TP-Link Smart Plugs
@@ -49,13 +53,13 @@ To control TP-Link smart plugs using the Matter protocol, follow these steps:
 
 Example:
 ```python
-from control import turn_on_smart_plug, turn_off_smart_plug
+from control import control_smart_plug
 
 # Turn on the smart plug
-turn_on_smart_plug('smart_plug_id')
+control_smart_plug('matter_device_id', 'on')
 
 # Turn off the smart plug
-turn_off_smart_plug('smart_plug_id')
+control_smart_plug('matter_device_id', 'off')
 ```
 
 ### Retrieving Data from Nature Remo E
