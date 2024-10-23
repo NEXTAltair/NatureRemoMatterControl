@@ -1,1 +1,5 @@
 __pycache__/
+venv/
+
+# 設定ファイル/Config file
+config.ini

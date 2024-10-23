@@ -8,7 +8,7 @@ def main():
     config.read('config.ini')
     token = config['NatureRemo']['token']
     ip_address = config['TPLink']['ip_address']
-    
+
     while True:
         data = get_nature_remo_data(token)
         display_data(data)
