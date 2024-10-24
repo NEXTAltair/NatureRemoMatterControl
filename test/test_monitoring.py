@@ -35,7 +35,7 @@ def test_display_data(capsys):
 
 # Test case to read config.ini and verify values
 # config.iniを読み込んで値を検証するテストケース
-def test_read_config_ini():
+def test_read_config_ini(capsys):
     config = configparser.ConfigParser()
     config.read('config.ini')
     token = config['NatureRemo']['token']

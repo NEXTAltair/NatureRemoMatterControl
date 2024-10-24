@@ -1,18 +1,16 @@
 import requests
-from tplink_smartplug import SmartPlug
+import subprocess
 import logging
 import traceback
 
-# Function to control TP-Link smart plugs using Matter protocol
-# Matterプロトコルを利用してTP-Linkスマートプラグを制御する機能
+# Python-kasaを利用してTP-Linkスマートプラグを制御する機能
 def control_smart_plug(ip_address, state):
     try:
         logging.info("Starting control_smart_plug function")
-        plug = SmartPlug(ip_address)
         if state == "on":
-            plug.turn_on()
+            subprocess.run(["kasa", "--host", ip_address, "on"], check=True)
         elif state == "off":
-            plug.turn_off()
+            subprocess.run(["kasa", "--host", ip_address, "off"], check=True)
         else:
             print("Invalid state. Use 'on' or 'off'.")
         logging.info("Completed control_smart_plug function")
