@@ -1,3 +1,5 @@
+import logging
+import traceback
 import requests
 import toml
 from datetime import datetime, timezone, timedelta
@@ -77,6 +79,7 @@ def display_instant_power(data):
 
 # 瞬時電力計測値が負の値かどうかを判定する関数
 def is_reverse_power_flow(value):
+    logging.info(f"value: {value}")
     return value < 0
 
 if __name__ == "__main__":
