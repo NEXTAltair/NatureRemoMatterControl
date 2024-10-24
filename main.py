@@ -1,7 +1,6 @@
-import time
 import configparser
 from monitoring import get_nature_remo_data, get_instant_power, is_reverse_power_flow
-from control import control_plugs_based_on_data, login_tplinknbu
+from control import control_plug, login_tplinknbu
 from logging_config import setup_logging
 import logging
 import traceback
@@ -16,7 +15,11 @@ async def main():
     user_name = config['TPLink']['user_name']
     password = config['TPLink']['password']
 
-    await login_tplinknbu(ip_address, user_name, password)
+    dev = await login_tplinknbu(ip_address, user_name, password)
+    if dev:
+        logging.debug("Login successful")
+    else:
+        logging.error("Login failed")
 
     while True:
         try:
@@ -24,7 +27,7 @@ async def main():
             appliances = get_nature_remo_data(token)
             data = get_instant_power(appliances)
             reverse_power_flag = is_reverse_power_flow(data[0]['value'])
-            await control_plugs_based_on_data(reverse_power_flag, ip_address)
+            await control_plug(dev, reverse_power_flag, ip_address)
             logging.info("Main loop iteration completed")
         except Exception as e:
             logging.error("Exception occurred", exc_info=True)

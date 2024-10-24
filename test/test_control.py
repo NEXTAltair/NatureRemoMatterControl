@@ -13,11 +13,12 @@ class TestControl(unittest.TestCase):
         user_name = 'test_user'
         password = 'test_password'
 
-        await login_tplinknbu(ip_address, user_name, password)
+        result = await login_tplinknbu(ip_address, user_name, password)
 
         mock_discover_single.assert_called_once_with(ip_address, username=user_name, password=password)
         mock_device.turn_on.assert_called_once()
         mock_device.update.assert_called_once()
+        self.assertTrue(result)
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,15 +1,20 @@
 import asyncio
+import subprocess
 from kasa import Discover
 import logging
 import traceback
 
-def control_plug(on_of: bool, ip_address: str):
+async def control_plug(dev, on_of: bool, ip_address: str):
     """
     スマートプラグを制御
     """
     try:
-        command = ["kasa", "--host", ip_address, on_of]
-        subprocess.run(command, check=True)
+        if on_of:
+            await dev.turn_on()
+            await dev.update()
+        else:
+            await dev.turn_off()
+            await dev.update()
         logging.info(f"プラグを{on_of}にしました。")
         return
     except Exception as e:
@@ -18,6 +23,12 @@ def control_plug(on_of: bool, ip_address: str):
         raise
 
 async def login_tplinknbu(ip_address: str, user_name: str, password: str):
-    dev = await Discover.discover_single(ip_address, username=user_name, password=password)
-    await dev.turn_on()
-    await dev.update()
+    try:
+        dev = await Discover.discover_single(ip_address, username=user_name, password=password)
+        await dev.update()
+        logging.debug("Login successful")
+        return dev
+    except Exception as e:
+        logging.error("Login failed", exc_info=True)
+        traceback.print_exc()
+        return False

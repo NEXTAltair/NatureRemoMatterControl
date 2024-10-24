@@ -6,3 +6,5 @@ config.ini
 
 # 開発用ファイル/Development file
 *.log
+.vscode/
+test/NatureRemoMatterControl.code-workspace
