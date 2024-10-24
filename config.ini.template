@@ -2,4 +2,6 @@
 token = YOUR_ACCESS_TOKEN
 
 [TPLink]
+user_name = YOUR_SMART_PLUG_USER_NAME
+password = YOUR_SMART_PLUG_PASSWORD
 ip_address = YOUR_SMART_PLUG_IP_ADDRESS
