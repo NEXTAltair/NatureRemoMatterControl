@@ -3,3 +3,6 @@ venv/
 
 # 設定ファイル/Config file
 config.ini
+
+# 開発用ファイル/Development file
+*.log
