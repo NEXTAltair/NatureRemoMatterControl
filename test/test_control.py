@@ -1,36 +1,23 @@
 import unittest
 from unittest.mock import patch, MagicMock
-from control import control_smart_plug, control_plugs_based_on_data
+from control import login_tplinknbu
 
 class TestControl(unittest.TestCase):
 
-    @patch('control.subprocess.run')
-    def test_control_smart_plug_on(self, mock_run):
-        control_smart_plug('192.168.1.100', 'on')
-        mock_run.assert_called_once_with(["kasa", "--host", '192.168.1.100', "on"], check=True)
+    @patch('control.Discover.discover_single')
+    async def test_login_tplinknbu(self, mock_discover_single):
+        mock_device = MagicMock()
+        mock_discover_single.return_value = mock_device
 
-    @patch('control.subprocess.run')
-    def test_control_smart_plug_off(self, mock_run):
-        control_smart_plug('192.168.1.100', 'off')
-        mock_run.assert_called_once_with(["kasa", "--host", '192.168.1.100', "off"], check=True)
+        ip_address = '192.168.1.100'
+        user_name = 'test_user'
+        password = 'test_password'
 
-    @patch('control.subprocess.run')
-    def test_control_plugs_based_on_data(self, mock_run):
-        data = {
-            'appliances': [
-                {
-                    'properties': [
-                        {'epc': 'e7', 'val': '000003e8'}  # 1000 in hex
-                    ]
-                }
-            ]
-        }
-        control_plugs_based_on_data(data, '192.168.1.100')
-        mock_run.assert_called_once_with(["kasa", "--host", '192.168.1.100', "off"], check=True)
+        await login_tplinknbu(ip_address, user_name, password)
 
-        data['appliances'][0]['properties'][0]['val'] = '000003e7'  # 999 in hex
-        control_plugs_based_on_data(data, '192.168.1.100')
-        mock_run.assert_called_with(["kasa", "--host", '192.168.1.100', "on"], check=True)
+        mock_discover_single.assert_called_once_with(ip_address, username=user_name, password=password)
+        mock_device.turn_on.assert_called_once()
+        mock_device.update.assert_called_once()
 
 if __name__ == '__main__':
     unittest.main()

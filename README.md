@@ -53,10 +53,16 @@ import asyncio
 from control import control_smart_plug
 
 # Turn on the smart plug
-asyncio.run(control_smart_plug('192.168.1.100', 'on'))
+async def main():
+    await control_smart_plug('192.168.1.100', 'on')
+
+asyncio.run(main())
 
 # Turn off the smart plug
-asyncio.run(control_smart_plug('192.168.1.100', 'off'))
+async def main():
+    await control_smart_plug('192.168.1.100', 'off')
+
+asyncio.run(main())
 ```
 
 ### Retrieving Data from Nature Remo E
