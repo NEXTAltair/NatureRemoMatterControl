@@ -29,7 +29,7 @@ async def main():
             appliances = get_nature_remo_data(token)
             data = get_instant_power(appliances)
             data_dict = data[0]
-            logging.info(f"{data_dict['updated_at']} {data_dict['description']}: {data_dict['value']} {data_dict['unit']} ")
+            logging.info(f"{data_dict['updated_at']} {data_dict['description']}: {data_dict['value']} {data_dict['unit']}")
             reverse_power_flag = is_reverse_power_flow(data_dict['value'])
 
             if reverse_power_flag != previous_reverse_power_flag:
