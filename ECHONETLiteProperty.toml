@@ -1,0 +1,125 @@
+[EPC.SuperClass."0x80"]
+description = '動作状態'
+data_type = 'unsigned char'
+
+[EPC.SuperClass."0x80".values]
+'30' = 'ON'
+'31' = 'OFF'
+
+[EPC.SuperClass."0x85"]
+description = '積算消費電力計測値'
+unit = '0.001 kWh'
+data_type = 'unsigned long'
+range = '0x00000000～0x3B9AC9FF'
+access = 'Get'
+
+[EPC."0x02"."0x6B"]
+description = 'EL_ELECTRIC_WATER_HEATER'
+
+[EPC."0x02"."0x6B"."0xB0"]
+description = '沸き上げ自動設定'
+data_type = 'unsigned char'
+
+[EPC."0x02"."0x6B"."0xB0".values]
+'0x41' = '自動沸き上げ'
+'0x42' = '手動沸き上げ'
+'0x43' = '手動で沸き上げ停止'
+
+[EPC."0x02"."0x6B"."0xB2"]
+description = '沸き上げ中状態'
+data_type = 'unsigned char'
+
+[EPC."0x02"."0x6B"."0xB2".values]
+'0x41' = '沸き上げ中'
+'0x42' = '非沸き上げ中'
+
+[EPC."0x02"."0x6B"."0xC0"]
+description = '昼間沸き増し許可設定'
+data_type = 'unsigned char'
+
+[EPC."0x02"."0x6B"."0xC0".values]
+'0x41' = '昼間沸き増し許可'
+'0x42' = '昼間沸き増し禁止'
+
+[EPC."0x02"."0x6B"."0xC3"]
+description = '給湯中状態'
+data_type = 'unsigned char'
+
+[EPC."0x02"."0x6B"."0xC3".values]
+'0x41' = '給湯中'
+'0x42' = '非給湯中'
+
+[EPC."0x02"."0x6B"."0xE1"]
+description = '残湯量計測値'
+data_type = 'unsigned short'
+unit = 'L'
+range = '0x0000～0xFFFD'
+
+[EPC."0x02"."0x6B"."0xE3"]
+description = '風呂自動モード設定'
+data_type = 'unsigned char'
+
+[EPC."0x02"."0x6B"."0xE3".values]
+'0x41' = '自動入'
+'0x42' = '手動解除'
+
+[EPC."0x02"."0x6B"."0xEA"]
+description = '風呂動作状態監視'
+data_type = 'unsigned char'
+
+[EPC."0x02"."0x6B"."0xEA".values]
+'0x41' = '湯張り中'
+'0x42' = '停止中'
+'0x43' = '保温中'
+
+[EPC."0x02"."0x88"]
+description = 'EL_POWER_METER'
+
+[EPC."0x02"."0x88"."0xD3"]
+description = '係数'
+unit = '1'
+data_type = 'unsigned long'
+range = '0x00000000～0x000F423F'
+access = 'Get'
+
+[EPC."0x02"."0x88"."0xD7"]
+description = '積算電力量有効桁数'
+data_type = 'unsigned char'
+range = '0x01～0x08'
+access = 'Get'
+
+[EPC."0x02"."0x88"."0xE0"]
+description = '積算電力量計測値(正方向計測値)'
+unit = 'kWh'
+data_type = 'unsigned long'
+range = '0x00000000～0x05F5E0FF'
+access = 'Get'
+
+[EPC."0x02"."0x88"."0xE1"]
+description = '積算電力量単位(正方向、逆方向計測値)'
+data_type = 'unsigned char'
+
+[EPC."0x02"."0x88"."0xE1".values]
+'0x00' = '1 kWh'
+'0x01' = '0.1 kWh'
+'0x02' = '0.01 kWh'
+'0x03' = '0.001 kWh'
+'0x04' = '0.0001 kWh'
+'0x0A' = '10 kWh'
+'0x0B' = '100 kWh'
+'0x0C' = '1000 kWh'
+'0x0D' = '10000 kWh'
+
+[EPC."0x02"."0x88"."0xE3"]
+description = '積算電力量計測値(逆方向計測値)'
+unit = 'kWh'
+data_type = 'unsigned long'
+range = '0x00000000～0x05F5E0FF'
+access = 'Get'
+
+[EPC."0x02"."0x88"."0xE7"]
+description = '瞬時電力計測値'
+unit = 'W'
+data_type = 'signed long'
+range = '0x80000001～0x7FFFFFFD'
+access = 'Get'
