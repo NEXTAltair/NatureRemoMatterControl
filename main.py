@@ -1,6 +1,6 @@
 import time
 import configparser
-from monitoring import get_nature_remo_data, display_data
+from monitoring import get_nature_remo_data, get_instant_power, is_reverse_power_flow
 from control import control_plugs_based_on_data
 from logging_config import setup_logging
 import logging
@@ -17,9 +17,10 @@ async def main():
     while True:
         try:
             logging.info("Starting main loop iteration")
-            data = get_nature_remo_data(token)
-            display_data(data)
-            await control_plugs_based_on_data(data, ip_address)
+            appliances = get_nature_remo_data(token)
+            data = get_instant_power(appliances)
+            reverse_power_flag = is_reverse_power_flow(data[0]['value'])
+            await control_plugs_based_on_data(reverse_power_flag, ip_address)
             logging.info("Main loop iteration completed")
         except Exception as e:
             logging.error("Exception occurred", exc_info=True)
