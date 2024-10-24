@@ -49,13 +49,14 @@ To control TP-Link smart plugs using the Matter protocol, follow these steps:
 
 Example:
 ```python
+import asyncio
 from control import control_smart_plug
 
 # Turn on the smart plug
-control_smart_plug('192.168.1.100', 'on')
+asyncio.run(control_smart_plug('192.168.1.100', 'on'))
 
 # Turn off the smart plug
-control_smart_plug('192.168.1.100', 'off')
+asyncio.run(control_smart_plug('192.168.1.100', 'off'))
 ```
 
 ### Retrieving Data from Nature Remo E
