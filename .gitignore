@@ -1,10 +1,19 @@
-__pycache__/
-venv/
-
-# 設定ファイル/Config file
+# 設定ファイル
 config.ini
 
-# 開発用ファイル/Development file
+# 開発用ファイル
 *.log
 .vscode/
 test/NatureRemoMatterControl.code-workspace
+
+# Git関連
+.git
+
+# Pythonキャッシュ
+__pycache__/
+*.py[cod]
+venv/
+.pytest_cache
+
+# 環境依存ファイル
+.env
