@@ -21,14 +21,22 @@ async def main():
     else:
         logging.error("Login failed")
 
+    previous_reverse_power_flag = None
+
     while True:
         try:
-            logging.info("Starting main loop iteration")
+            logging.debug("Starting main loop iteration")
             appliances = get_nature_remo_data(token)
             data = get_instant_power(appliances)
-            reverse_power_flag = is_reverse_power_flow(data[0]['value'])
-            await control_plug(dev, reverse_power_flag, ip_address)
-            logging.info("Main loop iteration completed")
+            data_dict = data[0]
+            logging.info(f"{data_dict['updated_at']} {data_dict['description']}: {data_dict['value']} {data_dict['unit']} ")
+            reverse_power_flag = is_reverse_power_flow(data_dict['value'])
+
+            if reverse_power_flag != previous_reverse_power_flag:
+                await control_plug(dev, reverse_power_flag, ip_address)
+
+            previous_reverse_power_flag = reverse_power_flag
+            logging.debug("Main loop iteration completed")
         except Exception as e:
             logging.error("Exception occurred", exc_info=True)
             traceback.print_exc()
