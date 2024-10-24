@@ -1,7 +1,4 @@
-import pytest
 import unittest
-
-import subprocess
 from unittest.mock import patch, MagicMock
 from control import control_smart_plug, control_plugs_based_on_data
 
