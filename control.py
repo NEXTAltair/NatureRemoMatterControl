@@ -1,23 +1,34 @@
-import requests
-from tplink_smartplug import SmartPlug
+import asyncio
+import subprocess
+from kasa import Discover
+import logging
+import traceback
 
-# Function to control TP-Link smart plugs using Matter protocol
-def control_smart_plug(ip_address, state):
-    plug = SmartPlug(ip_address)
-    if state == "on":
-        plug.turn_on()
-    elif state == "off":
-        plug.turn_off()
-    else:
-        print("Invalid state. Use 'on' or 'off'.")
+async def control_plug(dev, on_of: bool, ip_address: str):
+    """
+    スマートプラグを制御
+    """
+    try:
+        if on_of:
+            await dev.turn_on()
+            await dev.update()
+        else:
+            await dev.turn_off()
+            await dev.update()
+        logging.info(f"プラグを{on_of}にしました。")
+        return
+    except Exception as e:
+        logging.error("Exception occurred in control_plug", exc_info=True)
+        traceback.print_exc()
+        raise
 
-# Function to turn on/off smart plugs based on data from Nature Remo E
-def control_plugs_based_on_data(data, ip_address):
-    for appliance in data['appliances']:
-        for prop in appliance['properties']:
-            if prop['epc'] == 'e7':  # Example EPC code for power consumption
-                power_consumption = int(prop['val'], 16)
-                if power_consumption > 1000:  # Example threshold value
-                    control_smart_plug(ip_address, "off")
-                else:
-                    control_smart_plug(ip_address, "on")
+async def login_tplinknbu(ip_address: str, user_name: str, password: str):
+    try:
+        dev = await Discover.discover_single(ip_address, username=user_name, password=password)
+        await dev.update()
+        logging.debug("Login successful")
+        return dev
+    except Exception as e:
+        logging.error("Login failed", exc_info=True)
+        traceback.print_exc()
+        return False

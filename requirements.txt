@@ -1,4 +1,6 @@
 requests
-tplink-smarthome-api
+python-kasa
 pytest
 python-matter-server
+pandas
+toml
