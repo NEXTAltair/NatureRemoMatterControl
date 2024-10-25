@@ -5,11 +5,15 @@ from datetime import datetime, timezone, timedelta
 
 # Nature Remo APIからデータを取得する関数
 def get_nature_remo_data(token):
-    url = "https://api.nature.global/1/echonetlite/appliances"
-    headers = {"Authorization": f"Bearer {token}"}
-    response = requests.get(url, headers=headers)
-    response.raise_for_status()
-    return response.json().get('appliances', [])
+    try:
+        url = "https://api.nature.global/1/echonetlite/appliances"
+        headers = {"Authorization": f"Bearer {token}"}
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()
+        return response.json().get('appliances', [])
+    except requests.RequestException as e:
+        logging.error(f"Request failed: {str(e)}")  # エラーメッセージを正確にログ出力
+        return []  # エラー時は空のリストを返却
 
 # EPCコードをフォーマットする関数
 def format_epc(epc):
@@ -89,6 +93,9 @@ if __name__ == "__main__":
         token = config['NatureRemo']['token']
 
         appliances = get_nature_remo_data(token)
+        if not appliances:
+            print("データが見つかりませんでした。")
+            exit()
         data = get_instant_power(appliances)
         display_instant_power(data)
 

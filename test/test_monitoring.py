@@ -1,4 +1,5 @@
 import pytest
+import requests
 from unittest.mock import patch
 from monitoring import get_nature_remo_data, get_instant_power, is_reverse_power_flow
 
@@ -15,13 +16,28 @@ mock_response = {
     ]
 }
 
-# Test case to mock API responses from Nature Remo E
+# Nature Remo APIからのレスポンスをモックするテストケース
 @patch('monitoring.requests.get')
 def test_get_nature_remo_data(mock_get):
+    # 正常なモックレスポンス
+    mock_response = {'appliances': [{'name': 'Light', 'id': '123'}]}
     mock_get.return_value.json.return_value = mock_response
     token = 'dummy_token'
+
+    # 正常系テスト
     data = get_nature_remo_data(token)
     assert data == mock_response['appliances']
+
+    # 空リストのケースをテスト
+    mock_get.return_value.json.return_value = {'appliances': []}
+    data = get_nature_remo_data(token)
+    assert data == []
+
+    # エラー時のケースをテスト
+    mock_get.side_effect = requests.RequestException("API Error")
+    data = get_nature_remo_data(token)
+    assert data == []  # エラー時は空リストが返ることを確認
+
 
 # Test case to verify data parsing and display
 def test_get_instant_power():

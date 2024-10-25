@@ -27,6 +27,9 @@ async def main():
         try:
             logging.debug("Starting main loop iteration")
             appliances = get_nature_remo_data(token)
+            if not appliances:
+                logging.error("appliances Data not found")
+                continue
             data = get_instant_power(appliances)
             data_dict = data[0]
             logging.info(f"{data_dict['updated_at']} {data_dict['description']}: {data_dict['value']} {data_dict['unit']}")
