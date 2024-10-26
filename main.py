@@ -43,7 +43,7 @@ async def main():
         except Exception as e:
             logging.error("Exception occurred", exc_info=True)
             traceback.print_exc()
-        await asyncio.sleep(1800)  # # 次の反復の前に 1800 秒待機します /Wait for 1800 seconds before the next iteration
+        await asyncio.sleep(600)  # # 次の反復の前に 600 秒待機します /Wait for 600 seconds before the next iteration
 
 if __name__ == "__main__":
     asyncio.run(main())
