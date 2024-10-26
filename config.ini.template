@@ -1,10 +1,12 @@
+[local]
+root_ip = YOUR_LOCAL_IP
+
 [NatureRemo]
 token = YOUR_ACCESS_TOKEN
 
 [TPLink]
 user_name = YOUR_SMART_PLUG_USER_NAME
 password = YOUR_SMART_PLUG_PASSWORD
-root_ip = YOUR_SMART_PLUG_ROOT_IP
 device_ip = YOUR_SMART_PLUG_DEVICE_IPS
 
 # root_ip: ルートIPアドレスを指定します
