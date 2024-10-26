@@ -8,3 +8,4 @@ config.ini
 *.log
 .vscode/
 test/NatureRemoMatterControl.code-workspace
+NatureRemoMatterControl.code-workspace
