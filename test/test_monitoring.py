@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch
-from monitoring import get_nature_remo_data, get_instant_power, is_reverse_power_flow
+from monitoring import get_nature_remo_data, get_instant_power, is_reverse_power_flow, NatureAPIError, LANError, InternetError
 
 # Mock API response from Nature Remo E
 mock_response = {
@@ -37,3 +37,27 @@ def test_get_instant_power():
 def test_is_reverse_power_flow():
     assert is_reverse_power_flow(-100) == True
     assert is_reverse_power_flow(100) == False
+
+# Test case to verify LANError handling
+@patch('monitoring.requests.get')
+def test_get_nature_remo_data_lan_error(mock_get):
+    mock_get.side_effect = requests.exceptions.ConnectionError
+    token = 'dummy_token'
+    with pytest.raises(LANError):
+        get_nature_remo_data(token)
+
+# Test case to verify InternetError handling
+@patch('monitoring.requests.get')
+def test_get_nature_remo_data_internet_error(mock_get):
+    mock_get.side_effect = requests.exceptions.Timeout
+    token = 'dummy_token'
+    with pytest.raises(InternetError):
+        get_nature_remo_data(token)
+
+# Test case to verify NatureAPIError handling
+@patch('monitoring.requests.get')
+def test_get_nature_remo_data_nature_api_error(mock_get):
+    mock_get.side_effect = requests.exceptions.HTTPError
+    token = 'dummy_token'
+    with pytest.raises(NatureAPIError):
+        get_nature_remo_data(token)

@@ -3,12 +3,31 @@ import requests
 import toml
 from datetime import datetime, timezone, timedelta
 
+class NatureAPIError(Exception):
+    pass
+
+class LANError(Exception):
+    pass
+
+class InternetError(Exception):
+    pass
+
 # Nature Remo APIからデータを取得する関数
 def get_nature_remo_data(token):
     url = "https://api.nature.global/1/echonetlite/appliances"
     headers = {"Authorization": f"Bearer {token}"}
-    response = requests.get(url, headers=headers)
-    response.raise_for_status()
+    try:
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()
+    except requests.exceptions.RequestException as e:
+        if isinstance(e, requests.exceptions.ConnectionError):
+            raise LANError("LAN接続エラーが発生しました") from e
+        elif isinstance(e, requests.exceptions.Timeout):
+            raise InternetError("インターネット接続タイムアウトが発生しました") from e
+        elif isinstance(e, requests.exceptions.HTTPError):
+            raise NatureAPIError("Nature Remo APIエラーが発生しました") from e
+        else:
+            raise NatureAPIError("Nature Remo APIで不明なエラーが発生しました") from e
     return response.json().get('appliances', [])
 
 # EPCコードをフォーマットする関数
@@ -93,5 +112,11 @@ if __name__ == "__main__":
         data = get_instant_power(appliances)
         display_instant_power(data)
 
+    except NatureAPIError as e:
+        logging.error("NatureAPIエラーが発生しました", exc_info=True)
+    except LANError as e:
+        logging.error("LANエラーが発生しました", exc_info=True)
+    except InternetError as e:
+        logging.error("インターネットエラーが発生しました", exc_info=True)
     except Exception as e:
-        print("エラーが発生しました:", e)
+        logging.error("予期しないエラーが発生しました", exc_info=True)
