@@ -23,49 +23,53 @@ async def main():
     config = configparser.ConfigParser()
     config.read('config.ini')
     token = config['NatureRemo']['token']
-    ip_address = config['TPLink']['ip_address']
+    root_ip = config['TPLink']['root_ip']
+    device_ips = config['TPLink']['device_ip'].split(',')
     user_name = config['TPLink']['user_name']
     password = config['TPLink']['password']
 
-    try:
-        dev = await login_tplinknbu(ip_address, user_name, password)
-        if dev:
-            logging.debug("ログイン成功")
-        else:
-            raise TPLinkError("ログイン失敗")
-    except TPLinkError as e:
-        logging.error("TPLinkエラーが発生しました", exc_info=True)
-        traceback.print_exc()
-        return
-    except Exception as e:
-        logging.error("TPLinkログイン中に予期しないエラーが発生しました", exc_info=True)
-        traceback.print_exc()
-        return
+    for device_ip in device_ips:
+        ip_address = f"{root_ip.rsplit('.', 1)[0]}.{device_ip}"
 
-    while True:
         try:
-            logging.info("メインループの反復を開始します")
-            appliances = get_nature_remo_data(token)
-            data = get_instant_power(appliances)
-            reverse_power_flag = is_reverse_power_flow(data[0]['value'])
-            await control_plug(dev, reverse_power_flag, ip_address)
-            logging.info("メインループの反復が完了しました")
-        except NatureAPIError as e:
-            logging.error("NatureAPIエラーが発生しました", exc_info=True)
-            traceback.print_exc()
-        except LANError as e:
-            logging.error("LANエラーが発生しました", exc_info=True)
-            traceback.print_exc()
-        except InternetError as e:
-            logging.error("インターネットエラーが発生しました", exc_info=True)
-            traceback.print.exc()
+            dev = await login_tplinknbu(ip_address, user_name, password)
+            if dev:
+                logging.debug("ログイン成功")
+            else:
+                raise TPLinkError("ログイン失敗")
         except TPLinkError as e:
             logging.error("TPLinkエラーが発生しました", exc_info=True)
-            traceback.print.exc()
+            traceback.print_exc()
+            continue
         except Exception as e:
-            logging.error("予期しないエラーが発生しました", exc_info=True)
-            traceback.print.exc()
-        await asyncio.sleep(1800)  # 次の反復の前に 1800 秒待機します
+            logging.error("TPLinkログイン中に予期しないエラーが発生しました", exc_info=True)
+            traceback.print_exc()
+            continue
+
+        while True:
+            try:
+                logging.info("メインループの反復を開始します")
+                appliances = get_nature_remo_data(token)
+                data = get_instant_power(appliances)
+                reverse_power_flag = is_reverse_power_flow(data[0]['value'])
+                await control_plug(dev, reverse_power_flag, ip_address)
+                logging.info("メインループの反復が完了しました")
+            except NatureAPIError as e:
+                logging.error("NatureAPIエラーが発生しました", exc_info=True)
+                traceback.print_exc()
+            except LANError as e:
+                logging.error("LANエラーが発生しました", exc_info=True)
+                traceback.print_exc()
+            except InternetError as e:
+                logging.error("インターネットエラーが発生しました", exc_info=True)
+                traceback.print.exc()
+            except TPLinkError as e:
+                logging.error("TPLinkエラーが発生しました", exc_info=True)
+                traceback.print.exc()
+            except Exception as e:
+                logging.error("予期しないエラーが発生しました", exc_info=True)
+                traceback.print.exc()
+            await asyncio.sleep(600)  # 次の反復の前に 600 秒待機します
 
 if __name__ == "__main__":
     asyncio.run(main())
