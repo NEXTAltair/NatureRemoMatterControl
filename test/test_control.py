@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch, MagicMock
-from control import login_tplinknbu, control_plug
-from main import LANError, InternetError, NatureAPIError, TPLinkError
+from NatureRemoMatterControl.control_python_kasa.control import login_tplinknbu, control_plug
+from NatureRemoMatterControl.main import LANError, InternetError, NatureAPIError, TPLinkError
 
 class TestControl(unittest.TestCase):
 

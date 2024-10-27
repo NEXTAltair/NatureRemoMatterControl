@@ -19,8 +19,8 @@ if exist requirements.txt (
 )
 
 REM config.iniが存在しない場合、config.ini.templateをコピー / Copy config.ini.template to config.ini if not exists
-if not exist "%~dp0config.ini" (
-    copy "%~dp0config.ini.template" "%~dp0config.ini"
+if not exist "%~dp0\config\config.ini" (
+    copy "%~dp0\config\config.ini.template" "%~dp0\config\config.ini"
     echo 初期設定を入力してください:
 
     rem [local] セクション
@@ -46,7 +46,7 @@ if not exist "%~dp0config.ini" (
         echo user_name=%user_name%
         echo password=%password%
         echo device_ip=%device_ip%
-    ) > "%~dp0config.ini"
+    ) > "%~dp0\config\config.ini"
 )
 
 endlocal

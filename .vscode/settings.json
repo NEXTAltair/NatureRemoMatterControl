@@ -1,7 +1,28 @@
 {
-    "python.testing.pytestArgs": [
-        "test"
+    // Python設定
+    "python.defaultInterpreterPath": "${workspaceFolder}/venv/Scripts/python.exe",
+
+    // パス設定（統合）
+    "python.analysis.extraPaths": [
+        "${workspaceFolder}/src",
+        "${workspaceFolder}/test"  // もしテストモジュールのインポートも必要なら
     ],
+
+    // テスト設定
+    "python.testing.pytestEnabled": true,
     "python.testing.unittestEnabled": false,
-    "python.testing.pytestEnabled": true
+    "python.testing.pytestArgs": ["test"],  // あるいは "tests" - プロジェクト構造に合わせる
+
+    // Pylint設定
+    "pylint.enabled": true,
+    "pylint.args": [
+        "--init-hook",
+        "import sys; sys.path.append('src')"
+    ],
+    // エディタ設定
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit",
+        "source.fixAll.stylelint": "always"
+    }
 }

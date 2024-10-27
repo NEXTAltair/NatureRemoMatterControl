@@ -1,6 +1,8 @@
 import pytest
+import requests
 from unittest.mock import patch
-from monitoring import get_nature_remo_data, get_instant_power, is_reverse_power_flow, NatureAPIError, LANError, InternetError
+from NatureRemoMatterControl.monitorring_nature_api.monitoring import (
+    get_nature_remo_data, get_instant_power, is_reverse_power_flow)
 
 # Mock API response from Nature Remo E
 mock_response = {
