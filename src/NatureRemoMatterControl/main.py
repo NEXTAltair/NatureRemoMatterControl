@@ -1,21 +1,13 @@
-import sys
-import os
-
-# プロジェクトのルートディレクトリをsys.pathに追加
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'src'))
-
+#ディレクトリ構造変更Ver
+import configparser
+from src.NatureRemoMatterControl.monitorring_nature_api.monitoring import get_nature_remo_data, get_instant_power, is_reverse_power_flow
+from src.NatureRemoMatterControl.control_python_kasa.control import control_plug, login_tplinknbu
+from src.NatureRemoMatterControl.logging_config import setup_logging
+from src.NatureRemoMatterControl.exceptions import NetworkError, TPLinkError
 
 import asyncio
 import logging
-import configparser
 import traceback
-
-from NatureRemoMatterControl.control_python_kasa.control import control_plug, login_tplinknbu
-from NatureRemoMatterControl.monitorring_nature_api.monitoring import (
-    get_nature_remo_data,
-    get_instant_power,
-    is_reverse_power_flow)
-from NatureRemoMatterControl.exceptions import NetworkError, TPLinkError, DeviceUnreachableError
 
 async def handle_device(ip_address: str, user_name: str, password: str, token: str):
     try:
@@ -29,14 +21,21 @@ async def handle_device(ip_address: str, user_name: str, password: str, token: s
         traceback.print_exc()
         return
 
+    previous_reverse_power_flag = None
+
     while True:
         try:
-            logging.info("メインループの反復を開始します")
+            logging.debug("メインループの反復を開始します")
             appliances = get_nature_remo_data(token)
             data = get_instant_power(appliances)
-            reverse_power_flag = is_reverse_power_flow(data[0]['value'])
-            await control_plug(dev, reverse_power_flag)
-            logging.info("メインループの反復が完了しました")
+            data_dict = data[0]
+            logging.info(f"{data_dict['updated_at']})")
+            logging.info(f"{data_dict['description']}: {data_dict['value']} {data_dict['unit']}")
+            reverse_power_flag = is_reverse_power_flow(data_dict['value'])
+            if reverse_power_flag != previous_reverse_power_flag:
+                await control_plug(dev, reverse_power_flag)
+            previous_reverse_power_flag = reverse_power_flag
+            logging.debug("メインループの反復が完了しました")
         except NetworkError as e:
             logging.error(f"ネットワークでエラー: {e}", exc_info=True)
             traceback.print_exc()
@@ -46,22 +45,12 @@ async def handle_device(ip_address: str, user_name: str, password: str, token: s
         except Exception as e:
             logging.error("予期しないエラーが発生しました", exc_info=True)
             traceback.print_exc()
-        await asyncio.sleep(600)  # 次の反復の前に 600 秒待機します
-
-def setup_logging():
-    logging.basicConfig(
-        level=logging.DEBUG,
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        handlers=[
-            logging.FileHandler("app.log"),
-            logging.StreamHandler()
-        ]
-    )
+        await asyncio.sleep(5)  # 次の反復の前に 600 秒待機します /Wait for 600 seconds before the next iteration
 
 async def main():
     setup_logging()
     config = configparser.ConfigParser()
-    config.read('config.ini')
+    config.read('config/config.ini')
     token = config['NatureRemo']['token']
     root_ip = config['local']['root_ip']
     device_ips = config['TPLink']['device_ip'].split(',')

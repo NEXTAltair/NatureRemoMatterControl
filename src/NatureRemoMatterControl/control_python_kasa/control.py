@@ -1,6 +1,6 @@
+#ディレクトリ構造変更Ver
 from kasa import Discover
-from kasa.exceptions import KasaException
-from NatureRemoMatterControl.exceptions import TPLinkError
+from src.NatureRemoMatterControl.exceptions import TPLinkError
 import logging
 import traceback
 
@@ -19,7 +19,7 @@ async def control_plug(dev, on_of: bool):
             await dev.update()
         logging.info(f"プラグを{on_off_str}にしました。")
         return
-    except KasaException as e:
+    except Exception as e:
         logging.error("Exception occurred in control_plug", exc_info=True)
         traceback.print_exc()
         raise TPLinkError("スマートプラグの制御に失敗しました。") from e
@@ -30,7 +30,7 @@ async def login_tplinknbu(ip_address: str, user_name: str, password: str):
         await dev.update()
         logging.debug("Login successful")
         return dev
-    except KasaException as e:
+    except Exception as e:
         logging.error("Login failed", exc_info=True)
         traceback.print_exc()
         raise TPLinkError("TPLinkアカウントへのログインに失敗しました。") from e

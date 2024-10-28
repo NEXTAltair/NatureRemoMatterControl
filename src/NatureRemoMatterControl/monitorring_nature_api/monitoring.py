@@ -1,8 +1,9 @@
+#ディレクトリ構造変更Ver
 import logging
 import requests
 import toml
 from datetime import datetime, timezone, timedelta
-from NatureRemoMatterControl.exceptions import NetworkError
+from src.NatureRemoMatterControl.exceptions import NetworkError
 
 # Nature Remo APIからデータを取得する関数
 def get_nature_remo_data(token):
@@ -93,7 +94,6 @@ def is_reverse_power_flow(value: int) -> bool:
     Returns:
         bool: 負の値はTrue、正の値はFalse
     """
-    logging.info(f"value: {value}")
     return value < 0
 
 if __name__ == "__main__":

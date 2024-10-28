@@ -1,5 +1,5 @@
 # exceptions.py
-
+#ディレクトリ構造変更Ver
 class NetworkError(Exception):
     """ネットワーク接続に関する基底エラークラス."""
     def __init__(self, message: str = "ネットワーク接続エラーが発生しました。"):
