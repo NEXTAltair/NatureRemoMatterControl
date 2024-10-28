@@ -39,13 +39,3 @@ class TPLinkError(Exception):
     """TPLinkデバイスに関するエラークラス."""
     def __init__(self, message: str = "TPLinkデバイスの操作に失敗しました。"):
         super().__init__(message)
-
-class InternetError(NetworkError):
-    """インターネット接続エラー"""
-    pass
-
-class LANError(NetworkError):
-    """LAN接続エラー"""
-    pass
-
-# その他の例外クラス

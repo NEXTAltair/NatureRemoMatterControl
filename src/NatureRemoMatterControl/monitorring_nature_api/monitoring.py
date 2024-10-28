@@ -2,7 +2,7 @@ import logging
 import requests
 import toml
 from datetime import datetime, timezone, timedelta
-from NatureRemoMatterControl.exceptions import InternetError
+from NatureRemoMatterControl.exceptions import NetworkError
 
 # Nature Remo APIからデータを取得する関数
 def get_nature_remo_data(token):
@@ -16,7 +16,7 @@ def get_nature_remo_data(token):
         raise e
     except requests.exceptions.RequestException as e:
         logging.error("Nature Remo APIで不明なエラーが発生しました。", exc_info=True)
-        raise InternetError("インターネット接続に問題があります。") from e
+        raise NetworkError("インターネット接続に問題があります。") from e
     return response.json().get('appliances', [])
 
 # EPCコードをフォーマットする関数
@@ -84,8 +84,15 @@ def display_instant_power(data):
         print(f"  {item['description']}: {item['value']} {item['unit']} (更新日時: {item['updated_at']})")
         print(f"  逆潮流: {negative}")
 
-# 瞬時電力計測値が負の値かどうかを判定する関数
 def is_reverse_power_flow(value: int) -> bool:
+    """瞬時電力計測値が負の値かどうかを判定する関数
+
+    Args:
+        value (int): 瞬時電力計測値
+
+    Returns:
+        bool: 負の値はTrue、正の値はFalse
+    """
     logging.info(f"value: {value}")
     return value < 0
 
@@ -101,9 +108,9 @@ if __name__ == "__main__":
         data = get_instant_power(appliances)
         display_instant_power(data)
 
-    except NatureAPIError as e:
+    except requests.exceptions.RequestException as e:
         logging.error("NatureAPIエラーが発生しました", exc_info=True)
-    except InternetError as e:
+    except NetworkError as e:
         logging.error("インターネットエラーが発生しました", exc_info=True)
     except Exception as e:
         logging.error("予期しないエラーが発生しました", exc_info=True)

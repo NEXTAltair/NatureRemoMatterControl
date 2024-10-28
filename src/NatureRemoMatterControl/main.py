@@ -1,3 +1,10 @@
+import sys
+import os
+
+# プロジェクトのルートディレクトリをsys.pathに追加
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'src'))
+
+
 import asyncio
 import logging
 import configparser
@@ -8,20 +15,17 @@ from NatureRemoMatterControl.monitorring_nature_api.monitoring import (
     get_nature_remo_data,
     get_instant_power,
     is_reverse_power_flow)
-from NatureRemoMatterControl.exceptions import (
-    LANError,
-    InternetError,
-    TPLinkError
-)
+from NatureRemoMatterControl.exceptions import NetworkError, TPLinkError, DeviceUnreachableError
+
 async def handle_device(ip_address: str, user_name: str, password: str, token: str):
     try:
         dev = await login_tplinknbu(ip_address, user_name, password)
-    except TPLinkError as e:
-        logging.error("TPLinkエラーが発生しました", exc_info=True)
+    except TPLinkError:
+        logging.error(f"TPLinkエラーが発生しました", exc_info=True)
         traceback.print_exc()
         return
-    except Exception as e:
-        logging.error("TPLinkログイン中に予期しないエラーが発生しました", exc_info=True)
+    except NetworkError as e:
+        logging.error(f"TPLinkログイン中に予期しないエラーが発生しました: {e}", exc_info=True)
         traceback.print_exc()
         return
 
@@ -31,13 +35,10 @@ async def handle_device(ip_address: str, user_name: str, password: str, token: s
             appliances = get_nature_remo_data(token)
             data = get_instant_power(appliances)
             reverse_power_flag = is_reverse_power_flow(data[0]['value'])
-            await control_plug(dev, reverse_power_flag, ip_address)
+            await control_plug(dev, reverse_power_flag)
             logging.info("メインループの反復が完了しました")
-        except LANError as e:
-            logging.error("LANエラーが発生しました", exc_info=True)
-            traceback.print_exc()
-        except InternetError as e:
-            logging.error("インターネットエラーが発生しました", exc_info=True)
+        except NetworkError as e:
+            logging.error(f"ネットワークでエラー: {e}", exc_info=True)
             traceback.print_exc()
         except TPLinkError as e:
             logging.error("TPLinkエラーが発生しました", exc_info=True)

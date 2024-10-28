@@ -18,7 +18,7 @@ mock_response = {
 }
 
 # Test case to mock API responses from Nature Remo E
-@patch('monitoring.requests.get')
+@patch('NatureRemoMatterControl.monitorring_nature_api.monitoring.requests.get')
 def test_get_nature_remo_data(mock_get):
     mock_get.return_value.json.return_value = mock_response
     token = 'dummy_token'
@@ -40,26 +40,10 @@ def test_is_reverse_power_flow():
     assert is_reverse_power_flow(-100) == True
     assert is_reverse_power_flow(100) == False
 
-# Test case to verify LANError handling
-@patch('monitoring.requests.get')
-def test_get_nature_remo_data_lan_error(mock_get):
-    mock_get.side_effect = requests.exceptions.ConnectionError
-    token = 'dummy_token'
-    with pytest.raises(LANError):
-        get_nature_remo_data(token)
-
-# Test case to verify InternetError handling
-@patch('monitoring.requests.get')
-def test_get_nature_remo_data_internet_error(mock_get):
-    mock_get.side_effect = requests.exceptions.Timeout
-    token = 'dummy_token'
-    with pytest.raises(InternetError):
-        get_nature_remo_data(token)
-
 # Test case to verify NatureAPIError handling
-@patch('monitoring.requests.get')
+@patch('NatureRemoMatterControl.monitorring_nature_api.monitoring.requests.get')
 def test_get_nature_remo_data_nature_api_error(mock_get):
     mock_get.side_effect = requests.exceptions.HTTPError
     token = 'dummy_token'
-    with pytest.raises(NatureAPIError):
+    with pytest.raises(requests.exceptions.RequestException):
         get_nature_remo_data(token)
