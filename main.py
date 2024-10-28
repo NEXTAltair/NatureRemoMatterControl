@@ -36,12 +36,12 @@ async def main():
             reverse_power_flag = is_reverse_power_flow(data_dict['value'])
 
             if reverse_power_flag != previous_reverse_power_flag:
-                await control_plug(dev, reverse_power_flag, ip_address)
+                await control_plug(dev, reverse_power_flag)
 
             previous_reverse_power_flag = reverse_power_flag
             logging.debug("Main loop iteration completed")
         except Exception as e:
-            logging.error("Exception occurred", exc_info=True)
+            logging.error(f"Exception occurred{e}", exc_info=True)
             traceback.print_exc()
         await asyncio.sleep(600)  # # 次の反復の前に 600 秒待機します /Wait for 600 seconds before the next iteration
 
