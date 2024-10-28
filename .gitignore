@@ -9,3 +9,4 @@ config.ini
 .vscode/
 test/NatureRemoMatterControl.code-workspace
 NatureRemoMatterControl.code-workspace
+.coverage
