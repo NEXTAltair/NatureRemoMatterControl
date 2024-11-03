@@ -26,7 +26,7 @@ REM Run the application
 REM アプリケーションを実行します
 echo Running the application...
 echo アプリケーションを実行しています...
-python main.py
+python src/NatureRemoMatterControl/main.py
 if %errorlevel% neq 0 (
     echo The application exited with an error. Please check the logs for more information.
     echo アプリケーションがエラーで終了しました。詳細はログを確認してください。
