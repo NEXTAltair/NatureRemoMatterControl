@@ -1,3 +1,4 @@
+#古いやつ
 import configparser
 from monitoring import get_nature_remo_data, get_instant_power, is_reverse_power_flow
 from control import control_plug, login_tplinknbu
@@ -20,6 +21,9 @@ async def main():
         logging.debug("Login successful")
     else:
         logging.error("Login failed")
+        exit(1)
+
+    previous_reverse_power_flag = None
 
     previous_reverse_power_flag = None
 
