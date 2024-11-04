@@ -1,4 +1,3 @@
-# connectivity_checker.py
 import netifaces
 import socket
 import requests

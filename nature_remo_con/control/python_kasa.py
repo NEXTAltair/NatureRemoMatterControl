@@ -1,8 +1,7 @@
-# ディレクトリ構造変更Ver
-from kasa import Discover
-from exceptions import TPLinkError
 import logging
 import traceback
+from kasa import Discover
+from ..exceptions import TPLinkError
 
 
 async def control_plug(dev, on_of: bool):

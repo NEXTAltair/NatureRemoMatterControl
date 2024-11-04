@@ -4,7 +4,7 @@ setlocal
 rem 仮想環境の作成 / Create virtual environment
 set "VENV_DIR=%~dp0%venv"
 if not exist "%VENV_DIR%\Scripts\python.exe" (
-    Py -m venv "%VENV_DIR%"
+    py -3.12 -m venv "%VENV_DIR%"
 )
 
 rem Python実行ファイルを使用してpipをアップグレード / Upgrade pip using Python executable
@@ -13,10 +13,9 @@ rem Python実行ファイルを使用してpipをアップグレード / Upgrade
 rem 仮想環境を有効化 / Activate virtual environment
 call "%VENV_DIR%\Scripts\activate.bat"
 
-rem 依存パッケージのインストール / Install requirements
-if exist requirements.txt (
-    pip install -r requirements.txt
-)
+rem ローカルパッケージとしてインストール / Install as a local package
+pip install -e .
+
 
 REM config.iniが存在しない場合、config.ini.templateをコピー / Copy config.ini.template to config.ini if not exists
 if not exist "%~dp0\config\config.ini" (

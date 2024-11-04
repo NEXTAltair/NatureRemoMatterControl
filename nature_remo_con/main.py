@@ -1,27 +1,26 @@
-# ディレクトリ構造変更Ver
+import asyncio
+import logging
+import traceback
+
 import configparser
-from monitoring.nature_api import (
+from .monitoring.nature_api import (
     get_nature_remo_data,
     get_instant_power,
     is_reverse_power_flow,
 )
-from control.python_kasa import (
+from .control.python_kasa import (
     control_plug,
     login_tplinknbu,
 )
-from logging_config import setup_logging
-from exceptions import NetworkError, TPLinkError
-
-import asyncio
-import logging
-import traceback
+from .logging_config import setup_logging
+from .exceptions import NetworkError, TPLinkError
 
 
 async def handle_device(ip_address: str, user_name: str, password: str, token: str):
     try:
         dev = await login_tplinknbu(ip_address, user_name, password)
     except TPLinkError:
-        logging.error(f"TPLinkエラーが発生しました", exc_info=True)
+        logging.error("TPLinkエラーが発生しました", exc_info=True)
         traceback.print_exc()
         return
     except NetworkError as e:
@@ -51,10 +50,10 @@ async def handle_device(ip_address: str, user_name: str, password: str, token: s
         except NetworkError as e:
             logging.error(f"ネットワークでエラー: {e}", exc_info=True)
             traceback.print_exc()
-        except TPLinkError as e:
+        except TPLinkError:
             logging.error("TPLinkエラーが発生しました", exc_info=True)
             traceback.print_exc()
-        except Exception as e:
+        except Exception:
             logging.error("予期しないエラーが発生しました", exc_info=True)
             traceback.print_exc()
         await asyncio.sleep(
@@ -81,6 +80,10 @@ async def main():
         tasks.append(task)
 
     await asyncio.gather(*tasks)
+
+
+def cli():
+    asyncio.run(main())
 
 
 if __name__ == "__main__":
