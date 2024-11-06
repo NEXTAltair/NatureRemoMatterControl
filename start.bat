@@ -26,7 +26,7 @@ REM Run the application
 REM アプリケーションを実行します
 echo Running the application...
 echo アプリケーションを実行しています...
-nature-remo-con
+
 if %errorlevel% neq 0 (
     echo The application exited with an error. Please check the logs for more information.
     echo アプリケーションがエラーで終了しました。詳細はログを確認してください。
@@ -36,12 +36,4 @@ if %errorlevel% neq 0 (
 
 echo Application closed.
 echo アプリケーションが終了しました。
-pause@echo off
-REM venvディレクトリが存在するか確認
-if not exist "venv" (
-    REM install.batを実行
-    call install.bat
-)
-
-REM ウィンドウを開いたままにする
 pause
