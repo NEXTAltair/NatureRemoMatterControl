@@ -1,2 +1,6 @@
 __pycache__/
 venv/
+app.log
+.env
+.vscode
+config/config.ini
