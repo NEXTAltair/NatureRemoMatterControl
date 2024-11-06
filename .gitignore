@@ -4,7 +4,6 @@ config/config.ini
 # 開発用ファイル
 *.log
 .vscode/
-test/NatureRemoMatterControl.code-workspace
 
 # Git関連
 .git
