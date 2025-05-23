@@ -1,6 +1,0 @@
-requests
-python-kasa
-pytest
-python-matter-server
-pandas
-toml

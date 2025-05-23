@@ -1,4 +1,5 @@
 @echo off
+chcp 65001 >nul
 setlocal enabledelayedexpansion
 
 set venv_path=venv
@@ -9,8 +10,8 @@ if not exist "%venv_path%" (
     call install.bat
 )
 
-REM Activate virtual environment
-REM 仮想環境を有効化します
+REM Activate virtual environment (created by uv)
+REM 仮想環境を有効化します (uv で作成)
 call "%venv_path%\Scripts\activate"
 if %errorlevel% neq 0 (
     echo Failed to activate virtual environment. Please check your installation.

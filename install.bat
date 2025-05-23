@@ -1,20 +1,21 @@
 @echo off
+chcp 65001 >nul
 setlocal
 
 rem 仮想環境の作成 / Create virtual environment
 set "VENV_DIR=%~dp0%venv"
 if not exist "%VENV_DIR%\Scripts\python.exe" (
-    py -3.12 -m venv "%VENV_DIR%"
+    uv venv "%VENV_DIR%"
 )
-
-rem Python実行ファイルを使用してpipをアップグレード / Upgrade pip using Python executable
-"%VENV_DIR%\Scripts\python.exe" -m pip install --upgrade pip
 
 rem 仮想環境を有効化 / Activate virtual environment
 call "%VENV_DIR%\Scripts\activate.bat"
 
+rem 依存関係の同期 / Sync dependencies
+uv pip sync pyproject.toml
+
 rem ローカルパッケージとしてインストール / Install as a local package
-pip install -e .
+uv pip install -e .
 
 
 REM config.iniが存在しない場合、config.ini.templateをコピー / Copy config.ini.template to config.ini if not exists
