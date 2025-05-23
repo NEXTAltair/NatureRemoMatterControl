@@ -23,23 +23,23 @@ WSL2を介してMatterの開発環境を整備するのはまた今度
 
 ## セットアップ手順
 
-1. リポジトリをクローンします：
+1. リポジトリをクローンします:
 
     ```sh
     git clone https://github.com/NEXTAltair/NatureRemoMatterControl.git
     cd NatureRemoMatterControl
     ```
 
-2. アプリケーションを開始します：
+2. アプリケーションを開始します:
 
     [start.bat](start.bat)
 
     `start.bat` が仮想環境のセットアップとアプリケーションの実行を行います。
 
-3. Nature Remo APIのアクセストークンとTP-LinkスマートプラグのIPアドレスを設定します：
+3. Nature Remo APIのアクセストークンとTP-LinkスマートプラグのIPアドレスを設定します:
 
     - Nature Remo開発者ポータルからアクセストークンを取得します。
-    - プロジェクトのルートディレクトリに [`config.ini`](config.ini) ファイルを作成し、以下の内容を記述します：
+    - プロジェクトのルートディレクトリに [`config.ini`](config.ini) ファイルを作成し、以下の内容を記述します:
 
         ```ini
         [local]
@@ -53,7 +53,7 @@ WSL2を介してMatterの開発環境を整備するのはまた今度
         password = YOUR_SMART_PLUG_PASSWORD
         ```
 
-4. TP-Linkスマートプラグをセットアップします：
+4. TP-Linkスマートプラグをセットアップします:
 
     - TP-LinkスマートプラグがLANに接続されていることを確認します。
     - [`control.py`](control.py) ファイルの指示に従ってスマートプラグを設定します。
@@ -64,12 +64,12 @@ WSL2を介してMatterの開発環境を整備するのはまた今度
 
 #### 日本語
 
-TP-Linkスマートプラグを制御するには、以下の手順に従います：
+TP-Linkスマートプラグを制御するには、以下の手順に従います:
 
 1. [`control.py`](control.py) ファイルから必要な関数をインポートします。
 2. 提供された関数を使用して、要件に基づいてスマートプラグをオン/オフします。
 
-**例：**
+**例:**
 
 ```python
 import asyncio
@@ -121,14 +121,14 @@ asyncio.run(main())
 
 #### 日本語
 
-Nature Remo Eからデータを取得するには、以下の手順に従います：
+Nature Remo Eからデータを取得するには、以下の手順に従います:
 
 1. monitoring.py
 
  ファイルから必要な関数をインポートします。
 2. 提供された関数を使用してデータを取得し、表示します。
 
-**例：**
+**例:**
 
 ```python
 from monitoring import get_nature_remo_data, display_instant_power
