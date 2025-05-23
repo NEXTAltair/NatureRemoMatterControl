@@ -1,8 +1,11 @@
 import asyncio
 import logging
 import traceback
+import os
 
+from pathlib import Path
 import configparser
+from dotenv import load_dotenv
 from .monitoring.nature_api import (
     get_nature_remo_data,
     get_instant_power,
@@ -62,14 +65,22 @@ async def handle_device(ip_address: str, user_name: str, password: str, token: s
 
 
 async def main():
+    load_dotenv()
     setup_logging()
     config = configparser.ConfigParser()
-    config.read("config/config.ini")
-    token = config["NatureRemo"]["token"]
-    root_ip = config["local"]["root_ip"]
+    # スクリプトファイルの絶対パスを取得し、そこからプロジェクトルートを特定
+    # main.py -> nature_remo_con -> src -> project_root
+    project_root_dir = Path(__file__).resolve().parent.parent.parent
+    config_file_path = project_root_dir / "config" / "config.ini"
+    
+    # エンコーディングを指定して読み込み
+    config.read(config_file_path, encoding='utf-8')
+    # 機密情報は環境変数から取得
+    token = os.getenv("NATURE_REMO_TOKEN")
+    root_ip = os.getenv("DEFAULT_GATEWAY")
     device_ips = config["TPLink"]["device_ip"].split(",")
-    user_name = config["TPLink"]["user_name"]
-    password = config["TPLink"]["password"]
+    user_name = os.getenv("TPLINK_USERNAME")
+    password = os.getenv("TPLINK_PASSWORD")
 
     tasks = []
     for device_ip in device_ips:
