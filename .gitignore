@@ -1,5 +1,5 @@
 # 設定ファイル
-config/config.ini
+.env
 
 # 開発用ファイル
 *.log
@@ -10,10 +10,6 @@ config/config.ini
 
 # Pythonキャッシュ
 __pycache__/
-venv/
-*.pyc
 *.py[cod]
+.venv/
 .pytest_cache
-
-# 環境依存ファイル
-.env
