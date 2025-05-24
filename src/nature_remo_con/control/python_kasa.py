@@ -1,10 +1,11 @@
-import logging
+from loguru import logger
 import traceback
-from kasa import Discover
+from kasa import Discover, SmartDevice
 from ..exceptions import TPLinkError
+from typing import Optional
 
 
-async def control_plug(dev, on_of: bool):
+async def control_plug(dev: SmartDevice, on_of: bool):
     """
     スマートプラグを制御
     """
@@ -17,23 +18,27 @@ async def control_plug(dev, on_of: bool):
             on_off_str = "OFF"
             await dev.turn_off()
             await dev.update()
-        logging.info(f"プラグを{on_off_str}にしました。")
+        logger.info(f"プラグを{on_off_str}にしました。")
         return
     except Exception as e:
-        logging.error("Exception occurred in control_plug", exc_info=True)
+        logger.error("Exception occurred in control_plug")
         traceback.print_exc()
         raise TPLinkError("スマートプラグの制御に失敗しました。") from e
 
 
-async def login_tplinknbu(ip_address: str, user_name: str, password: str):
+async def login_tplinknbu(ip_address: str, user_name: str, password: str) -> Optional[SmartDevice]:
     try:
         dev = await Discover.discover_single(
             ip_address, username=user_name, password=password
         )
-        await dev.update()
-        logging.debug("Login successful")
-        return dev
+        if dev:
+            await dev.update()
+            logger.debug("Login successful")
+            return dev
+        else:
+            logger.error(f"デバイス {ip_address} が見つかりませんでした。")
+            return None
     except Exception as e:
-        logging.error("Login failed", exc_info=True)
+        logger.error("Login failed")
         traceback.print_exc()
         raise TPLinkError("TPLinkアカウントへのログインに失敗しました。") from e

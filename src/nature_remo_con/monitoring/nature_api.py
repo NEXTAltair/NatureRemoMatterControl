@@ -1,5 +1,5 @@
 from datetime import datetime, timezone, timedelta
-import logging
+from loguru import logger
 import requests
 import toml
 from ..exceptions import NetworkError
@@ -13,10 +13,10 @@ def get_nature_remo_data(token):
         response = requests.get(url, headers=headers)
         response.raise_for_status()
     except requests.exceptions.HTTPError as e:
-        logging.error("Nature Remo APIでHTTPエラーが発生しました。", exc_info=True)
+        logger.error("Nature Remo APIでHTTPエラーが発生しました。")
         raise e
     except requests.exceptions.RequestException as e:
-        logging.error("Nature Remo APIで不明なエラーが発生しました。", exc_info=True)
+        logger.error("Nature Remo APIで不明なエラーが発生しました。")
         raise NetworkError("インターネット接続に問題があります。") from e
     return response.json().get("appliances", [])
 
@@ -122,8 +122,8 @@ if __name__ == "__main__":
         display_instant_power(data)
 
     except requests.exceptions.RequestException as e:
-        logging.error("NatureAPIエラーが発生しました", exc_info=True)
+        logger.error("NatureAPIエラーが発生しました")
     except NetworkError as e:
-        logging.error("インターネットエラーが発生しました", exc_info=True)
+        logger.error("インターネットエラーが発生しました")
     except Exception as e:
-        logging.error("予期しないエラーが発生しました", exc_info=True)
+        logger.error("予期しないエラーが発生しました")

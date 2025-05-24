@@ -30,14 +30,4 @@ Write-Host "アプリケーションを実行しています..."
 # アプリケーションを実行
 uv run nature-remo-con
 
-# 直前のコマンドの終了コードを確認
-if ($LASTEXITCODE -ne 0) {
-    Write-Host "The application exited with an error. Please check the logs for more information." -ForegroundColor Red
-    Write-Host "アプリケーションがエラーで終了しました。詳細はログを確認してください。" -ForegroundColor Red
-    Pause
-    exit 1
-}
-
-Write-Host "Application closed."
-Write-Host "アプリケーションが終了しました。"
 Pause 

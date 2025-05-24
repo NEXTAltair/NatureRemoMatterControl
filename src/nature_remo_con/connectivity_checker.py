@@ -2,7 +2,7 @@ import netifaces
 import socket
 import requests
 from typing import Optional
-from NatureRemoMatterControl.exceptions import (
+from .exceptions import (
     NetworkError,
     RouterUnreachableError,
     DeviceUnreachableError,

@@ -140,11 +140,11 @@ logger.error("エラーメッセージ")
 
 ### 5. 移行チェックリスト
 
-- [ ] `uv add loguru`でパッケージ追加
-- [ ] `logging_config.py`の完全書き換え
-- [ ] `main.py`のimport文とロギング呼び出し更新
-- [ ] `nature_api.py`のロギング呼び出し更新
-- [ ] `python_kasa.py`のロギング呼び出し更新
+- [x] `uv add loguru`でパッケージ追加
+- [x] `logging_config.py`の完全書き換え
+- [x] `main.py`のimport文とロギング呼び出し更新
+- [x] `nature_api.py`のロギング呼び出し更新
+- [x] `python_kasa.py`のロギング呼び出し更新
 - [ ] 既存テストの実行確認
 - [ ] 日本語ログ出力テスト
 - [ ] ログファイルローテーション動作確認

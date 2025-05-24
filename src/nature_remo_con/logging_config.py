@@ -1,19 +1,28 @@
-# ディレクトリ構造変更Ver
-import logging
-
+from loguru import logger
+import sys
 
 def setup_logging():
-    logger = logging.getLogger()
-    logger.setLevel(logging.INFO)
-
-    formatter = logging.Formatter(
-        "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    """Loguruを使用したロギング設定(日本語対応)"""
+    # 既存のハンドラーを削除
+    logger.remove()
+    
+    # コンソール出力(UTF-8対応、カラー表示)
+    logger.add(
+        sys.stdout,
+        format="<green>{time:YYYY-MM-DD HH:mm:ss}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>",
+        level="INFO",
+        colorize=True
     )
-
-    file_handler = logging.FileHandler("app.log")
-    file_handler.setFormatter(formatter)
-    logger.addHandler(file_handler)
-
-    console_handler = logging.StreamHandler()
-    console_handler.setFormatter(formatter)
-    logger.addHandler(console_handler)
+    
+    # ファイル出力(UTF-8明示指定、ローテーション対応)
+    logger.add(
+        "app.log",
+        format="{time:YYYY-MM-DD HH:mm:ss} | {level: <8} | {name}:{function}:{line} - {message}",
+        level="INFO",
+        encoding="utf-8",
+        rotation="10 MB",
+        retention="7 days",
+        compression="zip"
+    )
+    
+    return logger
